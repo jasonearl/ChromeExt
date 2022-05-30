@@ -1,40 +1,40 @@
-let myLeads = []
+let myBookmarks = []
 const inputEl = document.getElementById("input-el")
 const inputBtn = document.getElementById("input-btn")
 const ulEl = document.getElementById("ul-el")
 const deleteBtn = document.getElementById("delete-btn")
-const leadsFromLocalStorage = JSON.parse( localStorage.getItem("myLeads") )
+const bookmarksFromLocalStorage = JSON.parse( localStorage.getItem("myBookmarks") )
 const tabBtn = document.getElementById("tab-btn")
 
 
-// this will display the list of leads in the extension
-if (leadsFromLocalStorage) {
-    myLeads = leadsFromLocalStorage
-    render(myLeads)
+// this will display the list of bookmarks in the extension
+if (bookmarksFromLocalStorage) {
+    myBookmarks = bookmarksFromLocalStorage
+    render(myBookmarks)
 }
 
-// save the tab the is currently open in chrome to list of leads
+// save the tab the is currently open in chrome to list of bookmarks
 tabBtn.addEventListener("click", function(){
     // in Chrome, get access to the tabs in the current window
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-        // save the current tab url to the list of leads
-        myLeads.push(tabs[0].url)
+        // save the current tab url to the list of bookmarks
+        myBookmarks.push(tabs[0].url)
         // saving to local storage will prevent the tabs from being lost
         // when Chrome is closed closed
-        localStorage.setItem("myLeads", JSON.stringify(myLeads) )
-        render(myLeads)
+        localStorage.setItem("myBookmarks", JSON.stringify(myBookmarks) )
+        render(myBookmarks)
     })
 })
 
 
-// display the leads in the extension
-function render(leads) {
+// display the bookmarks in the extension
+function render(bookmarks) {
     let listItems = ""
-    for (let i = 0; i < leads.length; i++) {
+    for (let i = 0; i < bookmarks.length; i++) {
         listItems += `
             <li>
-                <a target='_blank' href='${leads[i]}'>
-                    ${leads[i]}
+                <a target='_blank' href='${bookmarks[i]}'>
+                    ${bookmarks[i]}
                 </a>
             </li>
         `
@@ -42,19 +42,19 @@ function render(leads) {
     ulEl.innerHTML = listItems
 }
 
-// remove all of the stored leads
+// remove all of the stored bookmarks
 deleteBtn.addEventListener("dblclick", function() {
     localStorage.clear()
-    myLeads = []
-    render(myLeads)
+    myBookmarks = []
+    render(myBookmarks)
 })
 
-// save the user input to the leads list
+// save the user input to the bookmarks list
 inputBtn.addEventListener("click", function() {
-    myLeads.push(inputEl.value)
+    myBookmarks.push(inputEl.value)
     inputEl.value = ""
     // saving to local storage will prevent the tabs from being lost
     // when Chrome is closed closed
-    localStorage.setItem("myLeads", JSON.stringify(myLeads) )
-    render(myLeads)
+    localStorage.setItem("myBookmarks", JSON.stringify(myBookmarks) )
+    render(myBookmarks)
 })
